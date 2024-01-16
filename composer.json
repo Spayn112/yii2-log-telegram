@@ -1,13 +1,11 @@
 {
-    "name": "sergeymakinen/yii2-telegram-log",
-    "homepage": "https://github.com/sergeymakinen/yii2-telegram-log",
+    "name": "sergeymakinen/yii2-log-telegram",
     "description": "Telegram log target for Yii 2",
-    "keywords": ["yii2-telegram-log", "yii2", "yii", "telegram", "log", "logging"],
+    "keywords": ["yii2", "yii", "telegram", "log", "logging"],
     "type": "yii2-extension",
     "license": "MIT",
     "support": {
-        "issues": "https://github.com/sergeymakinen/yii2-telegram-log/issues",
-        "source": "https://github.com/sergeymakinen/yii2-telegram-log"
+        "source": "https://github.com/spayn/yii2-log-telegram"
     },
     "authors": [
         {
@@ -33,6 +31,11 @@
     "autoload-dev": {
         "psr-4": {
             "sergeymakinen\\yii\\telegramlog\\tests\\": "tests"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true
         }
     }
 }
