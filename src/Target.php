@@ -123,28 +123,36 @@ class Target extends \yii\log\Target
      */
     protected function formatMessageRequest($message)
     {
-        $message = new Message($message, $this);
+        $objectMessage = new Message($message, $this);
         $request = [
             'chat_id' => $this->chatId,
             'parse_mode' => 'Markdown',
             'disable_web_page_preview' => true,
             'disable_notification' => false,
         ];
-        if (isset($this->enableNotification[$message->message[1]])) {
-            $request['disable_notification'] = !$this->enableNotification[$message->message[1]];
+        if (isset($this->enableNotification[$objectMessage->message[1]])) {
+            $request['disable_notification'] = !$this->enableNotification[$objectMessage->message[1]];
         } elseif (is_bool($this->enableNotification)) {
             $request['disable_notification'] = !$this->enableNotification;
         }
-        $request['text'] = preg_replace_callback('/{([^}]+)}([\n]*|$)/', function (array $matches) use ($message) {
-            if (isset($this->substitutions[$matches[1]])) {
-                $value = $this->substitute($matches[1], $message);
-                if ($value !== '') {
-                    return $value . $matches[2];
+        $text = $objectMessage->getText();
+        do {
+            $message[0] = mb_substr($text, 0, 3099);
+            $objectMessage = new Message($message, $this);
+
+            $request['text'] = preg_replace_callback('/{([^}]+)}([\n]*|$)/', function (array $matches) use ($objectMessage) {
+                if (isset($this->substitutions[$matches[1]])) {
+                    $value = $this->substitute($matches[1], $objectMessage);
+                    if ($value !== '') {
+                        return $value . $matches[2];
+                    }
                 }
-            }
-            return '';
-        }, $this->template);
-        return $request;
+                return '';
+            }, $this->template);
+
+            $text = mb_substr($text, 3099, null);
+            yield $request;
+        } while (! empty($text));
     }
 
     /**
