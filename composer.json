@@ -1,5 +1,5 @@
 {
-    "name": "sergeymakinen/yii2-log-telegram",
+    "name": "spayn/yii2-log-telegram",
     "description": "Telegram log target for Yii 2",
     "keywords": ["yii2", "yii", "telegram", "log", "logging"],
     "type": "yii2-extension",
