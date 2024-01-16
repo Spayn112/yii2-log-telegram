@@ -2,7 +2,7 @@
 
 [Telegram](https://telegram.org) log target for Yii 2.
 
-Form from [sergeymakinen/yii2-telegram-log](https://github.com/sergeymakinen/yii2-telegram-log)
+Fork from [sergeymakinen/yii2-telegram-log](https://github.com/sergeymakinen/yii2-telegram-log)
 
 ## Installation
 
