@@ -98,20 +98,22 @@ class Target extends \yii\log\Target
      */
     public function export()
     {
-        foreach (array_map([$this, 'formatMessageRequest'], $this->messages) as $request) {
-            $response = $this->httpClient
-                ->post('https://api.telegram.org/bot' . $this->token . '/sendMessage', $request)
-                ->setFormat(Client::FORMAT_JSON)
-                ->send();
-            if (!$response->getIsOk()) {
-                if (isset($response->getData()['description'])) {
-                    $description = $response->getData()['description'];
-                } else {
-                    $description = $response->getContent();
+        foreach ($this->messages as $message) {
+            foreach ($this->formatMessageRequest($message) as $request) {
+                $response = $this->httpClient
+                    ->post('https://api.telegram.org/bot' . $this->token . '/sendMessage', $request)
+                    ->setFormat(Client::FORMAT_JSON)
+                    ->send();
+                if (!$response->getIsOk()) {
+                    if (isset($response->getData()['description'])) {
+                        $description = $response->getData()['description'];
+                    } else {
+                        $description = $response->getContent();
+                    }
+                    throw new InvalidValueException(
+                        'Unable to send logs to Telegram: ' . $description, (int) $response->getStatusCode()
+                    );
                 }
-                throw new InvalidValueException(
-                    'Unable to send logs to Telegram: ' . $description, (int) $response->getStatusCode()
-                );
             }
         }
     }
